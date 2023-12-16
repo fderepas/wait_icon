@@ -1,4 +1,5 @@
 import os
+import sys
 
 def wrap(a):
     return '"'+str(a)+'"'
@@ -111,25 +112,62 @@ def generateColors(n,r1,v1,b1,a1,r2,v2,b2,a2):
         a=format(int(a1+i*(a2-a1)/(n-1)), '02x')
         answer.append("#"+r+v+b+a)
     return answer
-    
+
+def usage(name,msg):
+    if msg!="":
+        print ("Error: "+msg)
+    print (name+" usage")
+    print ("    --col <rrggbbaa> <rrggbbaa>")
+
+# start color red
+scr=255
+# start color green
+scg=255
+# start color blue
+scb=255
+# start color alpha
+sca=0
+# end color red
+ecr=255
+# end color green
+ecg=255
+# end color blue
+ecb=255
+# end color alpha
+eca=255
+
+for i in range(len(sys.argv)) :
+    if sys.argv[i]=="--col":
+        if i>len(sys.argv)-2:
+            usage(sys.argv[0]," two arguments required.")
+        i+=1
+        if len(sys.argv[i])!=8:
+            usage(sys.argv[0]," color size should be 8 characters.")
+        scr=int(sys.argv[i][0:2],16)
+        scg=int(sys.argv[i][2:4],16)
+        scb=int(sys.argv[i][4:6],16)
+        sca=int(sys.argv[i][6:8],16)
+        i+=1
+        if len(sys.argv[i])!=8:
+            usage(sys.argv[0]," color size should be 8 characters.")
+        ecr=int(sys.argv[i][0:2],16)
+        ecg=int(sys.argv[i][2:4],16)
+        ecb=int(sys.argv[i][4:6],16)
+        eca=int(sys.argv[i][6:8],16)
+
 l=[]
 n=6
-c=generateColors(n,255,255,255,0,255,255,255,255)
+c=generateColors(n,scr,scg,scb,sca,ecr,ecg,ecb,eca)
 a=getPattern(n)
 for i in range(n):
     b=a
     for j in range(n):
         col=c[j]
         b=b.replace("COLOR"+str((i+j)%n),col[:7])
-        print(col)
-        print(col[7:9])
-        print(int(col[7:9],16)/255)
         b=b.replace("ALPHA"+str((i+j)%n),str(int(col[7:9],16)/255))
         
     l.append(b)
 
 generatePng(l)
-os.system("convert -delay 20 -dispose Background -loop 0 w_*.png wait.gif")
-
-    
+os.system("convert -delay 20 -dispose Background -loop 0 w_*.png APNG:wait.png")
          
