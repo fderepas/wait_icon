@@ -15,7 +15,7 @@ Creates the file ```wait.png``` file below:
 ![wait icon](https://github.com/fderepas/wait_icon/blob/main/image/default.png)
 
 ```
-python generate_wait_icon.py --col ff0000ff 00ff00ff
+python generate_wait_icon.py --col ff0000ff 00ff00ff --square
 ```
 
 Creates the file ```wait.png``` image below:

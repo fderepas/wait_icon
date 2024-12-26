@@ -27,8 +27,29 @@ def circle(x,y,r,c,a) :
     pathCounter+=1
     return answer
     
+def square(x,y,r,c,a) :
+    """ Returns a string reprenting a square in an svg file.
 
-def getPattern(n):
+    Attributes
+    ----------
+    x : int
+        horizontal position of the center of the square.
+    y : int
+        vertical position of the center of the square.
+    r : int
+        side of the square.
+    c : str
+        the color of the square. 
+    a : str
+        alpha value for the color of the square.
+    """
+    global pathCounter
+    answer= '<rect style="fill:'+c+';stroke:none;stroke-width:2;stroke-linecap:square;\n    stroke-linejoin:round;stroke-miterlimit:8;stroke-dasharray:none;fill-opacity:'+a+'"\n    id="path1-'+str(pathCounter)+'" x='+wrap(x-r/2)+' y='+wrap(y-r/2)+' width='+wrap(2*r)+' height='+wrap(2*r)+'\n/>\n'
+    pathCounter+=1
+    return answer
+    
+
+def getPattern(shape,n):
     """ Returns a pattern for an svg file with n symbols to show.
 
     Attributes
@@ -40,7 +61,10 @@ def getPattern(n):
     c="";
     d=60/(n-1)
     for i in range(n):
-        c+=circle(42.8+d*i,33.2,r,"COLOR"+str(i),"ALPHA"+str(i))
+        if shape==1:
+            c+=square(42.8+d*i,33.2,r,"COLOR"+str(i),"ALPHA"+str(i))
+        else:
+            c+=circle(42.8+d*i,33.2,r,"COLOR"+str(i),"ALPHA"+str(i))
     a="""<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <svg
    width="100mm"
@@ -114,6 +138,7 @@ def generateColors(n,r1,v1,b1,a1,r2,v2,b2,a2):
     return answer
 
 def usage(name,msg):
+    """ Writes how to used this program."""
     if msg!="":
         print ("Error: "+msg)
     print (name+" usage")
@@ -136,8 +161,13 @@ ecb=255
 # end color alpha
 eca=255
 
+shape=0
+
 for i in range(len(sys.argv)) :
-    if sys.argv[i]=="--col":
+    if sys.argv[i]=="--square":
+        shape=1
+        i+=1
+    elif sys.argv[i]=="--col":
         if i>len(sys.argv)-2:
             usage(sys.argv[0]," two arguments required.")
         i+=1
@@ -158,7 +188,7 @@ for i in range(len(sys.argv)) :
 l=[]
 n=6
 c=generateColors(n,scr,scg,scb,sca,ecr,ecg,ecb,eca)
-a=getPattern(n)
+a=getPattern(shape,n)
 for i in range(n):
     b=a
     for j in range(n):
