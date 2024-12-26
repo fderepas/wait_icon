@@ -1,7 +1,7 @@
 
 ## About wait_icon
 
-A small python program which generates wait icons.
+A small python program which generates wait icons. Uses [ffmpeg](https://www.ffmpeg.org/) via [ImageMagick](https://imagemagick.org/index.php) and the command line version of [Inkscape](https://inkscape.org/).
 
 ## Example
 
